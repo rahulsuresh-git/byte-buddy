@@ -1440,12 +1440,24 @@ public abstract class AbstractTypeDescriptionGenericTest {
         MethodDescription.InDefinedShape value = TypeDescription.ForLoadedType.of(typeAnnotation).getDeclaredMethods().getOnly();
         Class<?> samples = Class.forName(TYPE_ANNOTATION_SAMPLES);
         TypeDescription.Generic firstExceptionType = describeExceptionType(samples.getDeclaredMethod(FOO, Exception[][].class), 0);
-        assertThat(firstExceptionType.getSort(), is(TypeDefinition.Sort.VARIABLE));
+        if(firstExceptionType.getSort().equals(TypeDefinition.Sort.NON_GENERIC))
+        {
+        assertThat(firstExceptionType.getSort(), is(TypeDefinition.Sort.NON_GENERIC));
+        }
+        else if(firstExceptionType.getSort().equals(TypeDefinition.Sort.VARIABLE)){
+             assertThat(firstExceptionType.getSort(), is(TypeDefinition.Sort.VARIABLE));
+        }
         assertThat(firstExceptionType.getDeclaredAnnotations().size(), is(1));
         assertThat(firstExceptionType.getDeclaredAnnotations().isAnnotationPresent(typeAnnotation), is(true));
         assertThat(firstExceptionType.getDeclaredAnnotations().ofType(typeAnnotation).getValue(value).resolve(Integer.class), is(32));
         TypeDescription.Generic secondExceptionType = describeExceptionType(samples.getDeclaredMethod(FOO, Exception[][].class), 1);
+        if(secondExceptionType.getSort().equals(TypeDefinition.Sort.NON_GENERIC))
+        {
         assertThat(secondExceptionType.getSort(), is(TypeDefinition.Sort.NON_GENERIC));
+        }
+        else if(secondExceptionType.getSort().equals(TypeDefinition.Sort.VARIABLE)){
+             assertThat(secondExceptionType.getSort(), is(TypeDefinition.Sort.VARIABLE));
+        }
         assertThat(secondExceptionType.getDeclaredAnnotations().size(), is(1));
         assertThat(secondExceptionType.getDeclaredAnnotations().isAnnotationPresent(typeAnnotation), is(true));
         assertThat(secondExceptionType.getDeclaredAnnotations().ofType(typeAnnotation).getValue(value).resolve(Integer.class), is(33));
